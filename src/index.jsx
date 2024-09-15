@@ -5,14 +5,7 @@ import ReactDOM from "react-dom/client";
 // Nykysuositus on käyttää configureStore funktiota createStoren sijasta
 import { createStore } from "redux";
 
-const noteReducer = (state = [], action) => {
-  if (action.type === "NEW_NOTE") {
-    state.push(action.payload);
-    return state;
-  }
-
-  return state;
-};
+import noteReducer from "./reducers/noteReducer";
 
 const store = createStore(noteReducer);
 
@@ -41,7 +34,7 @@ const App = () => {
         {store.getState().map((note) => (
           <li key={note.id}>
             {note.content}
-            <strong>{note.important ? "important" : ""}</strong>
+            <strong>{note.important ? " important" : ""}</strong>
           </li>
         ))}
       </ul>
@@ -58,5 +51,11 @@ const renderApp = () => {
 
 // Suorittaa sovelluksen ensimmäisen renderöinnin, ilman tätä sitä ei tapahtuisi ollenkaan
 renderApp();
+
 // renderApp kuuntelee storen muutoksia metodilla subscribe
 store.subscribe(renderApp);
+
+/* Selain antoi virheen ennen kuin reducer siirrettiin omaan moduuliinsa:
+Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed 
+to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it.
+*/
