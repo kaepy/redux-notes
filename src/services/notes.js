@@ -13,7 +13,7 @@ const getAll = async () => {
 };
 
 // Create a new note with the given content
-const createNote = async (content) => {
+const createNewNote = async (content) => {
   // Define the request options for the HTTP request
   const options = {
     method: "POST",
@@ -33,7 +33,7 @@ const createNote = async (content) => {
 
 // Toggle the importance of a note by its ID
 const toggleImportanceOf = async (id, important) => {
-  options = {
+  const options = {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ important }),
@@ -48,4 +48,4 @@ const toggleImportanceOf = async (id, important) => {
   return await response.json();
 };
 
-export default { getAll, createNote, toggleImportanceOf };
+export default { getAll, createNewNote, toggleImportanceOf };

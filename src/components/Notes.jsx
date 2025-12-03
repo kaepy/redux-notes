@@ -23,6 +23,8 @@ const Notes = () => {
       : notes.filter((note) => !note.important);
   });
 
+  console.log("LOG: " + notes.map((n) => n.id));
+
   return (
     <ul>
       {notes.map((note) => (
