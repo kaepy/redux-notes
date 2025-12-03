@@ -9,12 +9,43 @@ const getAll = async () => {
     throw new Error("Failed to fetch notes");
   }
 
-  // Parse and return the JSON data
-  //const data = await response.json();
-  //return data;
+  return await response.json(); // Parse and return the JSON response
+};
 
-  // More concise way to return the parsed JSON data
+// Create a new note with the given content
+const createNote = async (content) => {
+  // Define the request options for the HTTP request
+  const options = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ content, important: false }), // JS-object converted to JSON string
+  };
+
+  // Send the POST request to create a new note
+  const response = await fetch(baseUrl, options);
+
+  if (!response.ok) {
+    throw new Error("Failed to create note");
+  }
+
+  return await response.json(); // Parse and return the JSON response
+};
+
+// Toggle the importance of a note by its ID
+const toggleImportanceOf = async (id, important) => {
+  options = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ important }),
+  };
+
+  const response = await fetch(`${baseUrl}/${id}`, options);
+
+  if (!response.ok) {
+    throw new Error("Failed to update note importance");
+  }
+
   return await response.json();
 };
 
-export default { getAll };
+export default { getAll, createNote, toggleImportanceOf };
