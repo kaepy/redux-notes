@@ -8,17 +8,29 @@ const App = () => {
   const newNoteMutation = useMutation({
     mutationFn: createNote, // Function to create a new note
 
-    // On success, invalidate the 'notes' query to refetch the notes
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] }); // Invalidate notes query to refetch
+    // On success, update the notes query data
+    onSuccess: (newNote) => {
+      const notes = queryClient.getQueryData(["notes"]); // Get current notes
+      queryClient.setQueryData(["notes"], notes.concat(newNote)); // Update notes with the new note
     },
   });
 
   // Set up mutation for updating a note
   const updateNoteMutation = useMutation({
-    mutationFn: updateNote,
-    onSuccess: () => {
+    mutationFn: updateNote, // Function to update a note
+
+    // On success, invalidate the notes query to refetch
+    /*onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+    },*/
+
+    // Optimize performance: update the notes query data on success
+    onSuccess: (updateNote) => {
+      const notes = queryClient.getQueryData(["notes"]); // Get current notes
+      queryClient.setQueryData(
+        ["notes"],
+        notes.map((note) => (note.id !== updateNote.id ? note : updateNote))
+      ); // Update the specific note
     },
   });
 
@@ -40,6 +52,7 @@ const App = () => {
   const result = useQuery({
     queryKey: ["notes"],
     queryFn: getNotes,
+    refetchOnWindowFocus: false, // Disable refetch on window focus
   });
 
   // Debugging: log the result object
