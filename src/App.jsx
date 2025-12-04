@@ -1,3 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
+import { getNotes } from "./requests";
+
 const App = () => {
   const addNote = async (event) => {
     event.preventDefault();
@@ -10,7 +13,21 @@ const App = () => {
     console.log("toggle importance of", note.id);
   };
 
-  const notes = [];
+  // Use React Query to fetch notes
+  const result = useQuery({
+    queryKey: ["notes"],
+    queryFn: getNotes,
+  });
+
+  // Debugging: log the result object
+  console.log(JSON.parse(JSON.stringify(result)));
+
+  // Handle loading state
+  if (result.isLoading) {
+    return <div>loading data...</div>;
+  }
+
+  const notes = result.data; // Extract notes from the result
 
   return (
     <div>

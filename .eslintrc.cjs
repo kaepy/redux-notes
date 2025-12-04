@@ -18,5 +18,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "react/jsx-uses-react": "error",
+    "react/prop-types": "off",
   },
 };
