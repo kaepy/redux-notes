@@ -1,24 +1,30 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
-import NoteForm from "./components/NoteForm";
-import Notes from "./components/Notes";
-import VisibilityFilter from "./components/VisibilityFilter";
-import { initializeNotes } from "./reducers/noteReducer";
-
 const App = () => {
-  const dispatch = useDispatch();
+  const addNote = async (event) => {
+    event.preventDefault();
+    const content = event.target.note.value;
+    event.target.note.value = "";
+    console.log(content);
+  };
 
-  // Fetch notes from the backend and set them in the Redux store
-  useEffect(() => {
-    dispatch(initializeNotes()); // Dispatch the thunk action to fetch and set notes
-  }, [dispatch]); // Added dispatch to dependency array to avoid warnings
+  const toggleImportance = (note) => {
+    console.log("toggle importance of", note.id);
+  };
+
+  const notes = [];
 
   return (
     <div>
-      <NoteForm />
-      <VisibilityFilter />
-      <Notes />
+      <h2>Notes app</h2>
+      <form onSubmit={addNote}>
+        <input name="note" />
+        <button type="submit">add</button>
+      </form>
+      {notes.map((note) => (
+        <li key={note.id} onClick={() => toggleImportance(note)}>
+          {note.content}
+          <strong> {note.important ? "important" : ""}</strong>
+        </li>
+      ))}
     </div>
   );
 };
